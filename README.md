@@ -1,4 +1,4 @@
-# Handler - why to contain small amoun of logic
+# Handler - why to contain small logic?
 Controller, mouse event listner, message consumer and similar entities are types of a handler. A handler simply
 accepts input, optionally makes a decision if possible to proceed with received input data, converts input
 to a suitable format, and calls an underlying procedure.
@@ -9,7 +9,7 @@ Let's describe what a handler can be and do.
 
 ## A software application and a handler
 Software application is computer program designed to carry specific task. A user/client can communicate with 
-an application via a user interface or an exposed network interface, like REST, message queue, etc. 
+an application via a user interface or via network calls, like REST, message queue, etc. 
 So, it means each application has a layer which is responsible for accepting user's/client's input,
 verifying input, calling a specific procedure inside an application, and finally return output. 
 Usually that layer is called a handler. Handler can be a REST controller with a set of endpoints, 
@@ -20,6 +20,7 @@ make a decision if possible to proceed, call the procedure, and return result of
 
 So, the role of a handler is to provide a way to communicate with an application, which usually consists of multiple libraries.
 Technically, it should not be difficult to provide to a user/client different interfaces to communicate with an application, but in different ways.
+
 It should be quite similar, if an application exposes REST or SOAP, Protobuf interface or anything similar to call the same procedure.
 Corresponding handler just accepts input data, prepares required input for a procedure, and calls a procedure.
 
@@ -44,7 +45,7 @@ Corresponding handler just accepts input data, prepares required input for a pro
 +--------------------------------------+--------------------------+
 ```
 
-## How much logic should be in a handler?
+## How much logic should contain a handler?
 To answer that question we would consider few aspects:
 - Single responsibility principle from OOP design
 - Testability
@@ -57,20 +58,17 @@ The principle is described as following at [oodesign.com](https://www.oodesign.c
 
 It means if a handler contains validating input, validating authentication, preparing other parameters for a procedure call,
 converting output, then such implementation clearly violates of a "Single responsibility principle". 
-It is much better to move out logic, which does not belong to a handler explicitly, to abstractions, input processing chains.
+It is much better to move out logic, which does not belong to a handler explicitly, to abstractions or input processing chains.
 
 From prospective of testing a handler that has long and complicated implementation with many dependencies is a nightmare :)
 Using Test-driven development and keeping in mind "Single responsibility" principle helps to create small enough implementation 
 which is easy to test and comply to OOP design patterns.
 
 Very good example of such architecture is Spring Boot - validation can be done by providing special annotation on DTO fields, 
-filters handle an authentication and assign all the parameters required by a context to a request attributes which can be easily used in a handler.
-Validation rules are subject of unit tests and can be tested separately, but definitely we should check if desired validation rules are 
-applied on a handler level.
+filters handle an authentication and assign all the parameters required by a context to a request attributes which can be easily used in a handler. Validation rules are subject of unit tests and can be tested separately, but definitely we should check if desired validation rules are applied on a handler level.
 
-A handler becomes easy to test - all what we need to test is how a controller accepts input data, fails/succeeds on validation, and if output complies 
-expected format. The rest of the things are tested separately by unit tests and finally by integration tests.
+A handler becomes easy to test - all what we need to test is how a controller accepts input data, fails/succeeds on validation, and if output complies expected format. The rest of the things are tested separately by unit tests and finally by integration tests.
 
 ## Conclusion
 Keep handler's implementation small, keep in mind OOP design principles, and optionally try to use Test-driven development as it facilitates
-keep implementation easy to test.
+keeping an implementation small and easy to test.
