@@ -1,4 +1,4 @@
-# Handler - why to contain small logic?
+# Handler - why small implementation is good?
 Controller, mouse event listner, message consumer and similar entities are types of a handler. A handler simply
 accepts input, optionally makes a decision if possible to proceed with received input data, converts input
 to a suitable format, and calls an underlying procedure.
